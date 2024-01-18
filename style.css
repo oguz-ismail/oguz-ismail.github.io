@@ -82,5 +82,5 @@ input[type="checkbox"]:disabled+label {
 }
 
 input[type="checkbox"]:disabled+label:after {
-	background: #444;
+	background: #333;
 }
