@@ -41,29 +41,26 @@ function restoreState(s) {
 	syncTiles();
 }
 
+function showBanner(msg) {
+	banner.innerText = msg;
+	banner.style.visibility = 'visible';
+}
+
 function updateButtons() {
 	if (selection.length == 2) {
 		const x = tiles.get(selection[0]);
 		const y = tiles.get(selection[1]);
 
-		if (x == y)
-			subtractBtn.disabled = true;
-		else
-			subtractBtn.disabled = false;
-
-		if ((x > y ? x%y : y%x) != 0)
-			divideBtn.disabled = true;
-		else
-			divideBtn.disabled = false;
-
 		addBtn.disabled = false;
-		multiplyBtn.disabled = false;
+		subBtn.disabled = x == y;
+		mulBtn.disabled = false;
+		divBtn.disabled = (x > y ? x%y : y%x) != 0;
 	}
 	else {
 		addBtn.disabled = true;
-		subtractBtn.disabled = true;
-		multiplyBtn.disabled = true;
-		divideBtn.disabled = true;
+		subBtn.disabled = true;
+		mulBtn.disabled = true;
+		divBtn.disabled = true;
 	}
 	
 	if (states.length == 0)
@@ -85,13 +82,13 @@ function buttonClicked(e) {
 	case addBtn:
 		result = x+y;
 		break;
-	case subtractBtn:
+	case subBtn:
 		result = x > y ? x-y : y-x;
 		break;
-	case multiplyBtn:
+	case mulBtn:
 		result = x*y;
 		break;
-	case divideBtn:
+	case divBtn:
 		result = x > y ? x/y : y/x;
 		break;
 	}
@@ -107,7 +104,7 @@ function buttonClicked(e) {
 }
 
 function tileSelected(e) {
-	const t = e.target.labels[0];
+	const t = e.target.nextElementSibling;
 	if (t.control.checked) {
 		if (selection.length == 2)
 			(selection.shift()).control.checked = false;
@@ -126,16 +123,15 @@ function endGame() {
 	states.splice(0);
 	updateButtons();
 	tiles.forEach((_, t) => t.control.disabled = true);
-	banner.innerText = 'You win!';
-	banner.style.display = 'block';
+	showBanner('You win!');
 	document.cookie = '_=1; expires='+puzzleExpiryDate+'; path=/';
 }
 
 const banner = document.getElementById('banner');
 const addBtn = document.getElementById('add');
-const subtractBtn = document.getElementById('subtract');
-const multiplyBtn = document.getElementById('multiply');
-const divideBtn = document.getElementById('divide');
+const subBtn = document.getElementById('sub');
+const mulBtn = document.getElementById('mul');
+const divBtn = document.getElementById('div');
 const undoBtn = document.getElementById('undo');
 const labels = document.getElementsByTagName('label');
 const target = document.getElementById('target');
@@ -148,18 +144,17 @@ for (let i = 0; i < labels.length; i++)
 	tiles.set(labels[i], numbers[i]);
 
 if (document.cookie != '') {
-	banner.innerText = 'Try again?';
-	banner.style.display = 'block';
+	showBanner('Try again?');
 	document.body.onclick = () => {
 		document.body.onclick = '';
-		banner.style.display = 'none';
+		banner.style.visibility = '';
 	};
 }
 
 addBtn.onclick = buttonClicked;
-subtractBtn.onclick = buttonClicked;
-multiplyBtn.onclick = buttonClicked;
-divideBtn.onclick = buttonClicked;
+subBtn.onclick = buttonClicked;
+mulBtn.onclick = buttonClicked;
+divBtn.onclick = buttonClicked;
 undoBtn.onclick = () => restoreState(states.pop());
 tiles.forEach((_, t) => t.control.onchange = tileSelected);
 syncTiles();

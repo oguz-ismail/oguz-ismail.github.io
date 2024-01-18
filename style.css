@@ -21,17 +21,28 @@ body {
 	text-align: center;
 	margin: 0;
 	position: absolute;
-	top: 50%;
 	left: 50%;
+	top: 50%;
 	transform: translate(-50%, -50%);
+	white-space: nowrap;
+}
+
+div {
+	width: 100%;
+	position: absolute;
+	bottom: 100%;
 }
 
 #banner {
-	display: none;
+	visibility: hidden;
 }
 
-p {
-	white-space: nowrap;
+#banner+p {
+	margin-bottom: 0;
+}
+
+div+p {
+	margin-top: 0;
 }
 
 button {
@@ -83,4 +94,8 @@ input[type="checkbox"]:disabled+label {
 
 input[type="checkbox"]:disabled+label:after {
 	background: #333;
+}
+
+#target {
+	margin-bottom: 0;
 }
