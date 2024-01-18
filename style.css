@@ -1,0 +1,86 @@
+@font-face {
+	font-family: myfont;
+	src: url(font.woff);
+}
+
+@font-face {
+	font-family: "Computer Modern";
+	src: url(cmr10.woff);
+}
+
+@font-face {
+	font-family: "Computer Modern";
+	src: url(cmbx10.woff);
+	font-weight: bold;
+}
+
+body {
+	background: black;
+	color: #eee;
+	font: xx-large "Computer Modern";
+	text-align: center;
+	margin: 0;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+}
+
+#banner {
+	display: none;
+}
+
+p {
+	white-space: nowrap;
+}
+
+button {
+	width: 1.5em;
+	height: 1.5em;
+	border: 0;
+	padding: 0;
+	background: inherit;
+	color: inherit;
+	font-size: inherit;
+	font-family: myfont;
+	cursor: pointer;
+}
+
+button:disabled {
+	color: gray;
+	cursor: default;
+}
+
+input[type="checkbox"] {
+	display: none;
+}
+
+label {
+	display: inline-block;
+	min-width: 1.5em;
+	cursor: pointer;
+	position: relative;
+}
+
+label:after {
+	position: absolute;
+	left: 1%;
+	top: 90%;
+	width: 0;
+	height: 0.06em;
+	background: #e42;
+	content: "";
+}
+
+input[type="checkbox"]:checked+label:after {
+	width: 98%;
+}
+
+input[type="checkbox"]:disabled+label {
+	color: gray;
+	cursor: default;
+}
+
+input[type="checkbox"]:disabled+label:after {
+	background: #444;
+}
