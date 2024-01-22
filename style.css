@@ -16,7 +16,7 @@
 
 body {
 	background: black;
-	color: #eee;
+	color: whitesmoke;
 	font: xx-large "Computer Modern";
 	text-align: center;
 	margin: 0;
@@ -75,16 +75,16 @@ label {
 
 label:after {
 	position: absolute;
-	left: 1%;
-	top: 90%;
+	left: 0;
+	top: 100%;
 	width: 0;
-	height: 0.06em;
-	background: #e42;
+	height: 0.0625em;
+	background: #E44D2E;
 	content: "";
 }
 
 input[type="checkbox"]:checked+label:after {
-	width: 98%;
+	width: 100%;
 }
 
 input[type="checkbox"]:disabled+label {
@@ -93,7 +93,7 @@ input[type="checkbox"]:disabled+label {
 }
 
 input[type="checkbox"]:disabled+label:after {
-	background: #333;
+	background: #3C3C3C;
 }
 
 #target {
