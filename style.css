@@ -17,7 +17,8 @@
 body {
 	background: black;
 	color: whitesmoke;
-	font: xx-large "Computer Modern";
+	font-size: xx-large;
+	font-family: "Computer Modern", myfont;
 	text-align: center;
 	margin: 0;
 	position: absolute;
@@ -30,19 +31,44 @@ body {
 div {
 	width: 100%;
 	position: absolute;
+}
+
+#above {
 	bottom: 100%;
 }
 
-#banner {
+#below {
+	top: 100%;
+}
+
+#header, #footer {
 	visibility: hidden;
 }
 
-#banner+p {
+#header+p {
 	margin-bottom: 0;
 }
 
-div+p {
+#above+p {
 	margin-top: 0;
+}
+
+#target {
+	margin-bottom: 0;
+}
+
+#below h2 {
+	margin-top: 0;
+}
+
+#footer {
+	display: table;
+	margin-left: auto;
+	margin-right: auto;
+	font-size: x-large;
+	white-space: pre;
+	text-align: right;
+	color: silver;
 }
 
 button {
@@ -53,7 +79,7 @@ button {
 	background: inherit;
 	color: inherit;
 	font-size: inherit;
-	font-family: myfont;
+	font-family: inherit;
 	cursor: pointer;
 }
 
@@ -94,8 +120,4 @@ input[type="checkbox"]:disabled+label {
 
 input[type="checkbox"]:disabled+label:after {
 	background: #3C3C3C;
-}
-
-#target {
-	margin-bottom: 0;
 }

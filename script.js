@@ -41,12 +41,52 @@ function restoreState(s) {
 	syncTiles();
 }
 
-function showBanner(msg) {
-	banner.innerText = msg;
-	banner.style.visibility = 'visible';
+function showMessage(s) {
+	header.innerText = s;
+	header.style.visibility = 'visible';
+}
+
+function hideMessage() {
+	document.body.removeEventListener('click', hideMessage);
+	header.style.visibility = '';
+}
+
+function showTips(e) {
+	let tips = '';
+	const x = tiles.get(selection[0]);
+	const y = targetNumber;
+
+	if (x < y)
+		tips += `${y-x}+${x}=${y}\n`;
+	else if (x > y)
+		tips += `${x}\u2212${x-y}=${y}\n`;
+
+	tips += `${y+x}\u2212${x}=${y}\n`;
+
+	if (x < y && y%x == 0)
+		tips += `${y/x}\u00D7${x}=${y}\n`;
+	else if (x >= y && x%y == 0)
+		tips += `${x}\u00F7${x/y}=${y}\n`;
+
+	tips += `${y*x}\u00F7${x}=${y}\n`;
+
+	footer.innerText = tips;
+	footer.style.visibility = 'visible';
+	e.stopPropagation();
+	document.body.addEventListener('click', hideTips);
+}
+
+function hideTips() {
+	document.body.removeEventListener('click', hideTips);
+	footer.style.visibility = '';
 }
 
 function updateButtons() {
+	if (selection.length == 1)
+		tipsBtn.disabled = false;
+	else
+		tipsBtn.disabled = true;
+	
 	if (selection.length == 2) {
 		const x = tiles.get(selection[0]);
 		const y = tiles.get(selection[1]);
@@ -123,11 +163,13 @@ function endGame() {
 	states.splice(0);
 	updateButtons();
 	tiles.forEach((_, t) => t.control.disabled = true);
-	showBanner('You win!');
+	showMessage('You win!');
 	document.cookie = '_=1; expires='+puzzleExpiryDate+'; path=/';
 }
 
-const banner = document.getElementById('banner');
+const header = document.getElementById('header');
+const footer = document.getElementById('footer');
+const tipsBtn = document.getElementById('tips');
 const addBtn = document.getElementById('add');
 const subBtn = document.getElementById('sub');
 const mulBtn = document.getElementById('mul');
@@ -144,13 +186,11 @@ for (let i = 0; i < labels.length; i++)
 	tiles.set(labels[i], numbers[i]);
 
 if (document.cookie != '') {
-	showBanner('Try again?');
-	document.body.onclick = () => {
-		document.body.onclick = '';
-		banner.style.visibility = '';
-	};
+	showMessage('Try again?');
+	document.body.addEventListener('click', hideMessage);
 }
 
+tipsBtn.onclick = showTips;
 addBtn.onclick = buttonClicked;
 subBtn.onclick = buttonClicked;
 mulBtn.onclick = buttonClicked;
