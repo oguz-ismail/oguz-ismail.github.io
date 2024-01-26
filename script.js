@@ -70,6 +70,8 @@ function showTips(e) {
 
 	tips += `${y*x}\u00F7${x}=${y}\n`;
 
+	(selection.pop()).control.checked = false;
+	updateButtons();
 	footer.innerText = tips;
 	footer.style.visibility = 'visible';
 	e.stopPropagation();
@@ -164,11 +166,10 @@ function endGame() {
 	updateButtons();
 	tiles.forEach((_, t) => t.control.disabled = true);
 	showMessage('You win!');
-	document.cookie = '_=1; expires='+puzzleExpiryDate+'; path=/';
+	document.cookie = `_=1; expires=${puzzleExpiryDate}; path=/`;
 }
 
 const header = document.getElementById('header');
-const footer = document.getElementById('footer');
 const tipsBtn = document.getElementById('tips');
 const addBtn = document.getElementById('add');
 const subBtn = document.getElementById('sub');
@@ -177,6 +178,7 @@ const divBtn = document.getElementById('div');
 const undoBtn = document.getElementById('undo');
 const labels = document.getElementsByTagName('label');
 const target = document.getElementById('target');
+const footer = document.getElementById('footer');
 
 const selection = [];
 const states = [];
