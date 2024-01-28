@@ -51,38 +51,6 @@ function hideMessage() {
 	header.style.visibility = '';
 }
 
-function showTips(e) {
-	let tips = '';
-	const x = tiles.get(selection[0]);
-	const y = targetNumber;
-
-	if (x < y)
-		tips += `${y-x}+${x}=${y}\n`;
-	else if (x > y)
-		tips += `${x}\u2212${x-y}=${y}\n`;
-
-	tips += `${y+x}\u2212${x}=${y}\n`;
-
-	if (x < y && y%x == 0)
-		tips += `${y/x}\u00D7${x}=${y}\n`;
-	else if (x >= y && x%y == 0)
-		tips += `${x}\u00F7${x/y}=${y}\n`;
-
-	tips += `${y*x}\u00F7${x}=${y}\n`;
-
-	(selection.pop()).control.checked = false;
-	updateButtons();
-	footer.innerText = tips;
-	footer.style.visibility = 'visible';
-	e.stopPropagation();
-	document.body.addEventListener('click', hideTips);
-}
-
-function hideTips() {
-	document.body.removeEventListener('click', hideTips);
-	footer.style.visibility = '';
-}
-
 function updateButtons() {
 	if (selection.length == 1)
 		tipsBtn.disabled = false;
@@ -105,7 +73,7 @@ function updateButtons() {
 		divBtn.disabled = true;
 	}
 	
-	if (states.length == 0)
+	if (states.length == 0 && selection.length == 0)
 		undoBtn.disabled = true;
 	else
 		undoBtn.disabled = false;
@@ -115,7 +83,38 @@ function syncTiles() {
 	tiles.forEach((n, t) => t.innerText = n);
 }
 
-function buttonClicked(e) {
+function showTips(e) {
+	let tips = '';
+	const x = tiles.get(selection[0]);
+	const y = targetNumber;
+
+	if (x < y)
+		tips += `${y-x}+${x}=${y}\n`;
+	else if (x > y)
+		tips += `${x}\u2212${x-y}=${y}\n`;
+
+	tips += `${y+x}\u2212${x}=${y}\n`;
+
+	if (x < y && y%x == 0)
+		tips += `${y/x}\u00D7${x}=${y}\n`;
+	else if (x >= y && x%y == 0)
+		tips += `${x}\u00F7${x/y}=${y}\n`;
+
+	tips += `${y*x}\u00F7${x}=${y}\n`;
+
+	undoSelection();
+	footer.innerText = tips;
+	footer.style.visibility = 'visible';
+	e.stopPropagation();
+	document.body.addEventListener('click', hideTips);
+}
+
+function hideTips() {
+	document.body.removeEventListener('click', hideTips);
+	footer.style.visibility = '';
+}
+
+function doArithmetic(e) {
 	const x = tiles.get(selection[0]);
 	const y = tiles.get(selection[1]);
 	let result;
@@ -145,6 +144,13 @@ function buttonClicked(e) {
 		endGame();
 }
 
+function undo() {
+	if (states.length != 0)
+		restoreState(states.pop());
+	else
+		undoSelection();
+}
+
 function tileSelected(e) {
 	const t = e.target.nextElementSibling;
 	if (t.control.checked) {
@@ -157,6 +163,11 @@ function tileSelected(e) {
 		selection.splice(selection.indexOf(t), 1);
 	}
 
+	updateButtons();
+}
+
+function undoSelection() {
+	(selection.pop()).control.checked = false;
 	updateButtons();
 }
 
@@ -193,11 +204,11 @@ if (document.cookie != '') {
 }
 
 tipsBtn.onclick = showTips;
-addBtn.onclick = buttonClicked;
-subBtn.onclick = buttonClicked;
-mulBtn.onclick = buttonClicked;
-divBtn.onclick = buttonClicked;
-undoBtn.onclick = () => restoreState(states.pop());
+addBtn.onclick = doArithmetic;
+subBtn.onclick = doArithmetic;
+mulBtn.onclick = doArithmetic;
+divBtn.onclick = doArithmetic;
+undoBtn.onclick = undo;
 tiles.forEach((_, t) => t.control.onchange = tileSelected);
 syncTiles();
 target.innerText = targetNumber;
