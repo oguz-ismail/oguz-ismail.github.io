@@ -5,12 +5,12 @@
 
 @font-face {
 	font-family: "Computer Modern";
-	src: url(cmr10.woff);
+	src: url(fcmrce.woff);
 }
 
 @font-face {
 	font-family: "Computer Modern";
-	src: url(cmbx10.woff);
+	src: url(fcmbce.woff);
 	font-weight: bold;
 }
 
