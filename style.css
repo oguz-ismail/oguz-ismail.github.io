@@ -83,6 +83,10 @@ button {
 	cursor: pointer;
 }
 
+button:focus {
+	outline: 0;
+}
+
 button:disabled {
 	color: gray;
 	cursor: default;

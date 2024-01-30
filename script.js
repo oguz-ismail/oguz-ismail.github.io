@@ -52,11 +52,6 @@ function hideMessage() {
 }
 
 function updateButtons() {
-	if (selection.length == 1)
-		tipsBtn.disabled = false;
-	else
-		tipsBtn.disabled = true;
-	
 	if (selection.length == 2) {
 		const x = tiles.get(selection[0]);
 		const y = tiles.get(selection[1]);
@@ -77,6 +72,11 @@ function updateButtons() {
 		undoBtn.disabled = true;
 	else
 		undoBtn.disabled = false;
+
+	if (selection.length == 1)
+		tipsBtn.disabled = false;
+	else
+		tipsBtn.disabled = true;
 }
 
 function syncTiles() {
@@ -178,15 +178,93 @@ function endGame() {
 	tiles.forEach((_, t) => t.control.disabled = true);
 	showMessage('You win!');
 	document.cookie = `_=1; expires=${puzzleExpiryDate}; path=/`;
+	document.removeEventListener('keydown', keyPressed);
+}
+
+function keyPressed(e) {
+	if (e.altKey || e.metaKey)
+		return;
+
+	if (e.shiftKey && e.key != '+' && e.key != '/')
+		return;
+
+	if (e.ctrlKey) {
+		if (e.key == 'z' || e.key == 'Z')
+			undoBtn.click();
+
+		return;
+	}
+
+	switch (e.key) {
+	case 'Tab':
+		alert(`Tab: Show keyboard shortcuts
++ or A: Add
+- or S: Subtract
+* or M: Multiply
+/ or D: Divide
+Backspace: Undo
+Space or Return: Show tips
+1 to 6: Select numbers`);
+		e.preventDefault();
+		break;
+	case 'a':
+	case 'A':
+	case '+':
+		addBtn.click();
+		break;
+	case 's':
+	case 'S':
+	case '-':
+		subBtn.click();
+		break;
+	case 'm':
+	case 'M':
+	case '*':
+		mulBtn.click();
+		break;
+	case 'd':
+	case 'D':
+	case '/':
+		divBtn.click();
+		break;
+	case 'Backspace':
+		undoBtn.click();
+		break;
+	case ' ':
+	case 'Enter':
+		tipsBtn.click();
+		break;
+	case '1':
+	case '2':
+	case '3':
+	case '4':
+	case '5':
+	case '6':
+		let i = 0;
+		const j = parseInt(e.key)-1;
+		for (const [t, _] of tiles) {
+			if (t.style.display == 'none')
+				continue;
+
+			if (i == j) {
+				t.click();
+				break;
+			}
+
+			i++;
+		}
+
+		break;
+	}
 }
 
 const header = document.getElementById('header');
-const tipsBtn = document.getElementById('tips');
 const addBtn = document.getElementById('add');
 const subBtn = document.getElementById('sub');
 const mulBtn = document.getElementById('mul');
 const divBtn = document.getElementById('div');
 const undoBtn = document.getElementById('undo');
+const tipsBtn = document.getElementById('tips');
 const labels = document.getElementsByTagName('label');
 const target = document.getElementById('target');
 const footer = document.getElementById('footer');
@@ -203,12 +281,13 @@ if (document.cookie != '') {
 	document.body.addEventListener('click', hideMessage);
 }
 
-tipsBtn.onclick = showTips;
 addBtn.onclick = doArithmetic;
 subBtn.onclick = doArithmetic;
 mulBtn.onclick = doArithmetic;
 divBtn.onclick = doArithmetic;
 undoBtn.onclick = undo;
+tipsBtn.onclick = showTips;
 tiles.forEach((_, t) => t.control.onchange = tileSelected);
 syncTiles();
 target.innerText = targetNumber;
+document.addEventListener('keydown', keyPressed);
