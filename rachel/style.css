@@ -1,0 +1,73 @@
+@font-face {
+	font-family: myfont;
+	src: url(/font.woff);
+}
+
+@font-face {
+	font-family: "Computer Modern";
+	src: url(/fcmrce.woff);
+}
+
+@font-face {
+	font-family: "Computer Modern Unicode";
+	src: url(cmunrm.woff);
+}
+
+body {
+	margin: 0;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	background: black;
+	color: whitesmoke;
+	text-align: center;
+	font-size: xx-large;
+	font-family: myfont, "Computer Modern";
+}
+
+div {
+	border-radius: 0.0625em;
+	background: whitesmoke;
+	padding: 0 0.125em;
+}
+
+#input {
+	width: 10.875em;
+	height: 1.625em;
+	border: 0;
+	background: none;
+	padding: 0;
+	caret-color: #E44D2E;
+	color: black;
+	font-size: 0.8em;
+	font-family: "Computer Modern Unicode";
+}
+
+input[type="submit"] {
+	width: 1.3em;
+	height: 1.3em;
+	border: 0;
+	background: none;
+	padding: 0;
+	color: black;
+	font-size: inherit;
+	font-family: inherit;
+	cursor: pointer;
+}
+
+input:focus {
+	outline: 0;
+}
+
+#output {
+	width: 10em;
+	border: 0;
+	padding: 0 0.125em;
+	background: inherit;
+	color: inherit;
+	text-align: right;
+	font-size: inherit;
+	font-family: inherit;
+	resize: none;
+}
